@@ -2,7 +2,7 @@
 
 Projeto do desafio Full Cycle para usar nginx como proxy reverso para uma aplicacao Node.js que grava nomes no MySQL e retorna HTML.
 
-## Instrucoes do desafio (mantidas)
+## Instrucoes do desafio
 
 > Nesse desafio voce colocar em pratica o que aprendemos em relacao a utilizacao do nginx como proxy reverso. A ideia principal e que quando um usuario acesse o nginx, o mesmo fara uma chamada em nossa aplicacao node.js. Essa aplicacao por sua vez adicionara um registro em nosso banco de dados mysql, cadastrando um nome na tabela people.
 >
