@@ -1,11 +1,54 @@
 services:
-
   db:
-    image: mysql
+    image: mysql:9.5
+    command: --innodb-use-native-aio=0  
     restart: always
+    container_name: db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: fullcycle
+    volumes:
+     - ./mysql:/var/lib/mysql
     ports:
-     - 3306:3306
-      
+      - 3306:3306
+    networks:
+      - fullcycle
+    healthcheck:
+     test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
+
+  node:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    image: hsakamoto/node:dev
+    container_name: node
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - fullcycle
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: hsakamoto/nginx:dev
+    container_name: nginx
+    ports:
+      - 8080:8080
+    networks:
+      - fullcycle
+    depends_on:
+      node:
+        condition: service_started
+
+networks:
+  fullcycle:
+    driver: bridge
