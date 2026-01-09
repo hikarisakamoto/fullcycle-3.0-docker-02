@@ -26,6 +26,8 @@ services:
     image: hsakamoto/node:dev
     container_name: node
     restart: always
+    volumes:
+     - ./node:/app
     ports:
       - 3000:3000
     networks:
